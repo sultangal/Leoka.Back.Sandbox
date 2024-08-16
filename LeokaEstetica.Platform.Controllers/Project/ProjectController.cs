@@ -1,4 +1,5 @@
 using AutoMapper;
+using Dapper;
 using LeokaEstetica.Platform.Base;
 using LeokaEstetica.Platform.Base.Abstractions.Services.Validation;
 using LeokaEstetica.Platform.Base.Filters;
@@ -476,9 +477,10 @@ public class ProjectController : BaseController
 	public async Task<IEnumerable<CatalogProjectOutput>> FilterProjectsAsync(
 		[FromQuery] FilterProjectInput filterProjectInput)
 	{
-		var result = await _projectService.FilterProjectsAsync(filterProjectInput);
+		// var result = await _projectService.FilterProjectsAsync(filterProjectInput);
 
-		return result;
+		// return result;
+		return [];
 	}
 
 	/// <summary>
@@ -510,6 +512,7 @@ public class ProjectController : BaseController
 	/// Метод пагинации проектов.
 	/// </summary>
 	/// <param name="page">Номер страницы.</param>
+	/// <param name="filterProjectInput">Фильтры</param>
 	/// <returns>Список проектов.</returns>
 	[HttpGet]
 	[Route("pagination/{page}")]
@@ -518,9 +521,11 @@ public class ProjectController : BaseController
 	[ProducesResponseType(403)]
 	[ProducesResponseType(500)]
 	[ProducesResponseType(404)]
-	public async Task<PaginationProjectOutput> GetProjectsPaginationAsync([FromRoute] int page)
+	public async Task<CatalogPaginationProjectOutput> GetProjectsPaginationAsync([FromRoute] int page,
+		[FromQuery] CatalogProjectsInput catalogProjectsInput)
 	{
-		var result = await _projectPaginationService.GetProjectsPaginationAsync(page);
+		// var result = await _projectPaginationService.GetProjectsPaginationAsync(page);
+		var result = await _projectService.FilterProjectsAsync(page, catalogProjectsInput);
 
 		return result;
 	}

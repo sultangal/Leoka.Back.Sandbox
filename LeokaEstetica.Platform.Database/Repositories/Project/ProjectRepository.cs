@@ -20,6 +20,7 @@ using LeokaEstetica.Platform.Models.Entities.Vacancy;
 using LeokaEstetica.Platform.Models.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using LeokaEstetica.Platform.Models.Dto.Output.Pagination;
 
 namespace LeokaEstetica.Platform.Database.Repositories.Project;
 
@@ -53,20 +54,26 @@ internal sealed class ProjectRepository : BaseRepository, IProjectRepository
 		_chatRepository = chatRepository;
 	}
 
-    /// <summary>
-    /// Метод фильтрует проекты в зависимости от фильтров.
-    /// </summary>
-    /// <param name="filters">Фильтры.</param>
-    /// <returns>Список проектов после фильтрации.</returns>
-    public async Task<IEnumerable<CatalogProjectOutput>> FilterProjectsAsync(FilterProjectInput filters)
+	/// <summary>
+	/// Метод фильтрует проекты в зависимости от фильтров.
+	/// </summary>
+	/// <param name="page">Номер страницы.</param>
+	/// <param name="pageSize">Количество записей на странице.</param>
+	/// <param name="filters">Фильтры.</param>
+	/// <returns>Список проектов после фильтрации.</returns>
+	public async Task<CatalogPaginationProjectOutput> FilterProjectsAsync(int page, int pageSize, CatalogProjectsInput catalogProjectsInput)
     {
         using var connection = await ConnectionProvider.GetConnectionAsync();
         
         var parameters = new DynamicParameters();
+        parameters.Add("@pageSize", pageSize);
+        var offset = (page - 1) * pageSize;
+        parameters.Add("@offset", offset);
 
         var query =
             "SELECT u.\"ProjectId\", u.\"ProjectName\", u.\"DateCreated\", u.\"ProjectIcon\", u.\"ProjectDetails\"," + 
-            " u.\"UserId\", p0.\"StageSysName\" AS \"ProjectStageSysName\" " +
+            " u.\"UserId\", p0.\"StageSysName\" AS \"ProjectStageSysName\", " +
+            "COUNT(*) OVER() AS \"TotalCount\" " +
             "FROM \"Projects\".\"CatalogProjects\" AS c " +
             "         INNER JOIN \"Projects\".\"UserProjects\" AS u ON c.\"ProjectId\" = u.\"ProjectId\" " +
             "         LEFT JOIN \"Moderation\".\"Projects\" AS p ON u.\"ProjectId\" = p.\"ProjectId\" " +
@@ -82,27 +89,31 @@ internal sealed class ProjectRepository : BaseRepository, IProjectRepository
             "        WHERE a.\"ProjectId\" = u.\"ProjectId\")) AND u.\"IsPublic\") " +
             "  AND (p.\"ModerationStatusId\" NOT IN (2, 3) OR ((p.\"ModerationStatusId\" IS NULL))) ";
         
-        if (filters.ProjectStages != null && 
-            filters.ProjectStages.Count != 0 && 
-            !filters.ProjectStages.Contains(FilterProjectStageTypeEnum.None))
+        if (catalogProjectsInput.ProjectStages != null && 
+            catalogProjectsInput.ProjectStages.Count != 0 && 
+            !catalogProjectsInput.ProjectStages.Contains(FilterProjectStageTypeEnum.None))
         {
             //TODO: В будущем завести в БД енамки и передавать сразу в виде энамок, а не стингов
-            var stageList = filters.ProjectStages?.Select(e => e.ToString()).ToList();
+            var stageList = catalogProjectsInput.ProjectStages?.Select(e => e.ToString()).ToList();
             parameters.Add("@stageList", stageList);
             query += " AND p0.\"StageSysName\" = ANY(@stageList) ";
         }
 
-        if (filters.IsAnyVacancies)
+        if (catalogProjectsInput.IsAnyVacancies)
             query += "  AND EXISTS ( " +
                      "    SELECT 1 " +
                      "    FROM \"Projects\".\"ProjectVacancies\" AS ppv " +
                      "    WHERE ppv.\"ProjectId\" = u.\"ProjectId\") ";
         
+        // query += "AND u.\"ProjectName\" LIKE '%проект%'";
+        
+        
         query += "ORDER BY u2.\"DateCreated\" DESC, s.\"ObjectId\" DESC ";
+        query += "OFFSET @offset LIMIT @pageSize";
 
         var result = await connection.QueryAsync<CatalogProjectOutput>(query, parameters);
 
-        return result;
+        return new CatalogPaginationProjectOutput(page, pageSize, result);
     }
 
     /// <summary>

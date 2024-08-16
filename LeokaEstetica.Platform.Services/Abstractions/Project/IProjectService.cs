@@ -141,7 +141,7 @@ public interface IProjectService
     /// </summary>
     /// <param name="filterProjectInput">Входная модель.</param>
     /// <returns>Список проектов после фильтрации.</returns>
-    Task<IEnumerable<CatalogProjectOutput>> FilterProjectsAsync(FilterProjectInput filterProjectInput);
+    Task<CatalogPaginationProjectOutput> FilterProjectsAsync(int page, CatalogProjectsInput catalogProjectsInput);
 
     /// <summary>
     /// Метод удаляет вакансию проекта.

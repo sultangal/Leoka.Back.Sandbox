@@ -43,6 +43,7 @@ using LeokaEstetica.Platform.Models.Enums;
 using LeokaEstetica.Platform.Services.Helpers;
 using Microsoft.Extensions.Logging;
 using System.Runtime.CompilerServices;
+using LeokaEstetica.Platform.Finder.Consts;
 
 [assembly: InternalsVisibleTo("LeokaEstetica.Platform.Tests")]
 
@@ -1034,20 +1035,25 @@ internal sealed class ProjectService : IProjectService
     /// <summary>
     /// Метод фильтрации проектов в зависимости от параметров фильтров.
     /// </summary>
-    /// <param name="filterProjectInput">Входная модель.</param>
+    /// <param name="page">Номер страницы.</param>
+    /// <param name="filters">Входная модель.</param>
     /// <returns>Список проектов после фильтрации.</returns>
-    public async Task<IEnumerable<CatalogProjectOutput>> FilterProjectsAsync(FilterProjectInput filters)
+    public async Task<CatalogPaginationProjectOutput> FilterProjectsAsync(int page, CatalogProjectsInput catalogProjectsInput)
     {
         try
         {
             // Разбиваем строку стадий проекта, так как там может приходить несколько значений в строке.
-            filters.ProjectStages = CreateProjectStagesBuilder.CreateProjectStagesResult(filters.StageValues);
+            catalogProjectsInput.ProjectStages = CreateProjectStagesBuilder.CreateProjectStagesResult(catalogProjectsInput.StageValues);
 
-            var result = await _projectRepository.FilterProjectsAsync(filters);
+            var result = await _projectRepository.FilterProjectsAsync(page, PaginationConst.TAKE_COUNT, catalogProjectsInput);
+            
+            //TODO: проверить нужен ли вообще этот метод если нет закрыть вообще CatalogPaginationProjectOutput для изменений
+            var resultProjects = await ExecuteCatalogConditionsAsync(result.Projects.AsList());
 
-            var resultProjects = await ExecuteCatalogConditionsAsync(result.AsList());
-
-            return resultProjects;
+            //TODO: это нужно на самом деле, раскомментируй потом.
+            // result.Projects = resultProjects;
+            
+            return result;
         }
 
 		catch (Exception ex)

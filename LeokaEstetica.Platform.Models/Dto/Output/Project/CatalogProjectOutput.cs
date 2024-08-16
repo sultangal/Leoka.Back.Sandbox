@@ -1,8 +1,8 @@
 using System.Globalization;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 
 namespace LeokaEstetica.Platform.Models.Dto.Output.Project;
-
 /// <summary>
 /// Класс выходной модели каталога проектов.
 /// </summary>
@@ -78,4 +78,10 @@ public class CatalogProjectOutput
     /// Признак проекта в архиве.
     /// </summary>
     public bool IsArchived { get; set; }
+    
+    /// <summary>
+    /// Общее количество
+    /// </summary>
+    [JsonIgnore]
+    public int TotalCount { get; set; }
 }

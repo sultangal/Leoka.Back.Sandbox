@@ -17,7 +17,7 @@ public interface IProjectRepository
     /// </summary>
     /// <param name="filters">Фильтры.</param>
     /// <returns>Список проектов после фильтрации.</returns>
-    Task<IEnumerable<CatalogProjectOutput>> FilterProjectsAsync(FilterProjectInput filters);
+    Task<CatalogPaginationProjectOutput> FilterProjectsAsync(int page, int pageSize, CatalogProjectsInput catalogProjectsInput);
     
     /// <summary>
     /// Метод создает новый проект пользователя.
