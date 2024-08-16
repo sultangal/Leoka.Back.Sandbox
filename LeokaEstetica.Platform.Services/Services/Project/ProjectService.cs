@@ -86,7 +86,7 @@ internal sealed class ProjectService : IProjectService
     private readonly IAccessUserService _accessUserService;
     private readonly IProjectModerationRepository _projectModerationRepository;
 
-	private readonly IDiscordService _discordService;
+	// private readonly IDiscordService _discordService;
 	private readonly IProjectManagementSettingsRepository _projectManagementSettingsRepository;
 
 	/// <summary>
@@ -96,7 +96,7 @@ internal sealed class ProjectService : IProjectService
 
     private readonly IAccessModuleService _accessModuleService;
     private readonly Lazy<IHubNotificationService> _hubNotificationService;
-    private readonly IMongoDbRepository _mongoDbRepository;
+    // private readonly IMongoDbRepository _mongoDbRepository;
 
     /// <summary>
     /// Конструктор.
@@ -133,14 +133,15 @@ internal sealed class ProjectService : IProjectService
         IAccessUserService accessUserService, 
         IMailingsService mailingsService, 
         IProjectModerationRepository projectModerationRepository,
-        IDiscordService discordService,
+        // IDiscordService discordService,
         IProjectManagementSettingsRepository projectManagementSettingsRepository,
         IGlobalConfigRepository globalConfigRepository,
         IProjectManagmentRepository projectManagmentRepository,
         IWikiTreeRepository wikiTreeRepository,
         IAccessModuleService accessModuleService,
-        Lazy<IHubNotificationService> hubNotificationService,
-         IMongoDbRepository mongoDbRepository)
+        Lazy<IHubNotificationService> hubNotificationService
+         // IMongoDbRepository mongoDbRepository
+        )
     {
         _projectRepository = projectRepository;
         _logger = logger;
@@ -155,14 +156,14 @@ internal sealed class ProjectService : IProjectService
         _accessUserService = accessUserService;
         _mailingsService = mailingsService;
         _projectModerationRepository = projectModerationRepository;
-        _discordService = discordService;
+        // _discordService = discordService;
         _projectManagementSettingsRepository = projectManagementSettingsRepository;
         _globalConfigRepository = globalConfigRepository;
         _projectManagmentRepository = projectManagmentRepository;
         _wikiTreeRepository = wikiTreeRepository;
         _accessModuleService = accessModuleService;
         _hubNotificationService = hubNotificationService;
-        _mongoDbRepository = mongoDbRepository;
+        // _mongoDbRepository = mongoDbRepository;
     }
 
 	#region Публичные методы.
@@ -316,7 +317,7 @@ internal sealed class ProjectService : IProjectService
 			await _mailingsService.SendNotificationCreatedProjectAsync(user.Email, projectName, projectId);
 
 			// Отправляем уведомление об отправленном проекте на модерацию.
-			await _discordService.SendNotificationCreatedProjectBeforeModerationAsync(projectId);
+			// await _discordService.SendNotificationCreatedProjectBeforeModerationAsync(projectId);
 
 			return project;
 		}
@@ -1173,13 +1174,13 @@ internal sealed class ProjectService : IProjectService
             }
             
             // Удаляем документы проекта.
-            var mongoDocumentIds = await _projectManagmentRepository.GetProjectMongoDocumentIdsByProjectIdAsync(
-                projectId);
+            // var mongoDocumentIds = await _projectManagmentRepository.GetProjectMongoDocumentIdsByProjectIdAsync(
+            //     projectId);
 
-            foreach (var did in mongoDocumentIds)
-            {
-                await _mongoDbRepository.RemoveFileAsync(did);
-            }
+            // foreach (var did in mongoDocumentIds)
+            // {
+            //     // await _mongoDbRepository.RemoveFileAsync(did);
+            // }
 
             await _hubNotificationService.Value.SendNotificationAsync("Все хорошо",
                 "Проект успешно удален.",
@@ -2254,7 +2255,7 @@ internal sealed class ProjectService : IProjectService
 			_logger.LogError(aggEx, aggEx.Message);
 
 			// Отправляем ошибки в чат пачки.
-			await _discordService.SendNotificationErrorAsync(aggEx);
+			// await _discordService.SendNotificationErrorAsync(aggEx);
 		}
 	}
 

@@ -234,11 +234,11 @@ internal class BaseServiceTest
 
         var resumeRepository = new ResumeRepository(pgContext, connectionProvider);
         var wikiRepository = new WikiTreeRepository(connectionProvider);
-        ProjectService = new ProjectService(projectRepository, null, userRepository, mapper,
-            ProjectNotificationsService, VacancyService, vacancyRepository,
-            subscriptionRepository, VacancyModerationService, projectNotificationsRepository,
-            accessUserService, null, ProjectModerationRepository, discordService, null,
-            globalConfigRepository, projectManagementRepository, wikiRepository, null, null, null);
+        // ProjectService = new ProjectService(projectRepository, null, userRepository, mapper,
+        //     ProjectNotificationsService, VacancyService, vacancyRepository,
+        //     subscriptionRepository, VacancyModerationService, projectNotificationsRepository,
+        //     accessUserService, null, ProjectModerationRepository, discordService, null,
+        //     globalConfigRepository, projectManagementRepository, wikiRepository, null, null, null);
         
         var ordersRepository = new OrdersRepository(pgContext);
         var commerceRepository = new CommerceRepository(pgContext, AppConfiguration);

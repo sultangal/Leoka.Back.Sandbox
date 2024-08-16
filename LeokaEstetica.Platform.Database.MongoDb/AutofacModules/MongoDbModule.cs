@@ -11,11 +11,11 @@ public class MongoDbModule : Module
     public static void InitModules(ContainerBuilder builder)
     {
         // Репозиторий хидера.
-        builder.RegisterType<MongoDbRepository>()
-            .Named<IMongoDbRepository>("MongoDbRepository")
-            .InstancePerLifetimeScope();
-        builder.RegisterType<MongoDbRepository>()
-            .As<IMongoDbRepository>()
-            .InstancePerLifetimeScope();
+        // builder.RegisterType<MongoDbRepository>()
+        //     .Named<IMongoDbRepository>("MongoDbRepository")
+        //     .InstancePerLifetimeScope();
+        // builder.RegisterType<MongoDbRepository>()
+        //     .As<IMongoDbRepository>()
+        //     .InstancePerLifetimeScope();
     }
 }

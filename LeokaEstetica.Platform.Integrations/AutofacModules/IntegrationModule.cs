@@ -16,20 +16,20 @@ public class IntegrationModule : Module
     public static void InitModules(ContainerBuilder builder)
     {
         // Сервис телеграм бота.
-        builder.RegisterType<TelegramBotService>()
-            .Named<ITelegramBotService>("TelegramBotService")
-            .InstancePerLifetimeScope();
-        builder.RegisterType<TelegramBotService>()
-            .As<ITelegramBotService>()
-            .InstancePerLifetimeScope();
+        // builder.RegisterType<TelegramBotService>()
+        //     .Named<ITelegramBotService>("TelegramBotService")
+        //     .InstancePerLifetimeScope();
+        // builder.RegisterType<TelegramBotService>()
+        //     .As<ITelegramBotService>()
+        //     .InstancePerLifetimeScope();
         
         // Сервис телеграм.
-        builder.RegisterType<TelegramService>()
-            .Named<ITelegramService>("TelegramService")
-            .InstancePerLifetimeScope();
-        builder.RegisterType<TelegramService>()
-            .As<ITelegramService>()
-            .InstancePerLifetimeScope();
+        // builder.RegisterType<TelegramService>()
+        //     .Named<ITelegramService>("TelegramService")
+        //     .InstancePerLifetimeScope();
+        // builder.RegisterType<TelegramService>()
+        //     .As<ITelegramService>()
+        //     .InstancePerLifetimeScope();
         
         // Сервис пачки.
         // builder.RegisterType<PachcaService>()
@@ -40,12 +40,12 @@ public class IntegrationModule : Module
         //     .InstancePerLifetimeScope();
         
         // Сервис дискорда.
-        builder.RegisterType<DiscordService>()
-            .Named<IDiscordService>("DiscordService")
-            .InstancePerLifetimeScope();
-        builder.RegisterType<DiscordService>()
-            .As<IDiscordService>()
-            .InstancePerLifetimeScope();
+        // builder.RegisterType<DiscordService>()
+        //     .Named<IDiscordService>("DiscordService")
+        //     .InstancePerLifetimeScope();
+        // builder.RegisterType<DiscordService>()
+        //     .As<IDiscordService>()
+        //     .InstancePerLifetimeScope();
         
         // Сервис транслитера ReversoAPI.
         // builder.RegisterType<ReversoService>()

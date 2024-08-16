@@ -19,10 +19,14 @@ using Quartz;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-builder.Services.AddControllers(opt =>
-    {
-        opt.Filters.Add(typeof(DiscordLogExceptionFilter));
-    })
+// builder.Services.AddControllers(opt =>
+//     {
+//         opt.Filters.Add(typeof(DiscordLogExceptionFilter));
+//     })
+//     .AddNewtonsoftJson()
+//     .AddControllersAsServices();
+
+builder.Services.AddControllers()
     .AddNewtonsoftJson()
     .AddControllersAsServices();
 
@@ -174,13 +178,13 @@ builder.Host.UseNLog();
 // Регистрируем IHttpClientFactory.
 builder.Services.AddHttpClient();
 
-builder.Services.AddSingleton(new MongoClient(configuration["MongoDb:FullHost"])
-    .GetDatabase(configuration["MongoDb:DatabaseName"]));
+// builder.Services.AddSingleton(new MongoClient(configuration["MongoDb:FullHost"])
+//     .GetDatabase(configuration["MongoDb:DatabaseName"]));
 
 // builder.Services.AddProblemDetails();
 
 // Запускаем ботов.
-await LogNotifyBot.RunAsync(configuration);
+// await LogNotifyBot.RunAsync(configuration);
 
 var app = builder.Build();
 
