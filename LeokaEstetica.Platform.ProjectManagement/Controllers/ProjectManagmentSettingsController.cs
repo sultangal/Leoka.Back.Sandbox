@@ -291,9 +291,10 @@ public class ProjectManagmentSettingsController : BaseController
             throw ex;
         }
         
-        var result = await _projectManagmentService.GetUserAvatarFileAsync(projectId, GetUserName());
-
-        return result;
+        // var result = await _projectManagmentService.GetUserAvatarFileAsync(projectId, GetUserName());
+        //
+        // return result;
+        return new FileContentResult(null!, String.Empty);
     }
 
     /// <summary>

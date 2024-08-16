@@ -19,7 +19,7 @@ internal class AgileObject
         await builder.InitObjectAsync();
         await builder.FillAuthorNameAsync();
         await builder.FillExecutorNameAsync();
-        await builder.FillExecutorAvatarAsync();
+        // await builder.FillExecutorAvatarAsync();
         await builder.FillWatcherNamesAsync();
         await builder.FillTagIdsAsync();
         await builder.FillTaskTypeNameAsync();

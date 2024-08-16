@@ -199,7 +199,7 @@ internal class DistributionStatusTaskService : IDistributionStatusTaskService
             if (mapTasks.Any())
             {
                 var userEmails = await _userRepository.GetUserEmailByUserIdsAsync(mapTasks.Select(x => x.ExecutorId));
-                var avatarFiles = await _userService.GetUserAvatarFilesAsync(projectId, userEmails);
+                // var avatarFiles = await _userService.GetUserAvatarFilesAsync(projectId, userEmails);
                 
                 // Записываем названия исходя от Id полей.
                 foreach (var ts in mapTasks)
@@ -222,16 +222,16 @@ internal class DistributionStatusTaskService : IDistributionStatusTaskService
                         ExecutorName = executorName
                     };
 
-                    if (!avatarFiles.ContainsKey(ts.ExecutorId))
-                    {
-                        // Получаем дефолтное изображение.
-                        ts.Executor.Avatar = avatarFiles.TryGet(0);
-                    }
-
-                    else
-                    {
-                        ts.Executor.Avatar = avatarFiles.TryGet(ts.ExecutorId);
-                    }
+                    // if (!avatarFiles.ContainsKey(ts.ExecutorId))
+                    // {
+                    //     // Получаем дефолтное изображение.
+                    //     ts.Executor.Avatar = avatarFiles.TryGet(0);
+                    // }
+                    //
+                    // else
+                    // {
+                    //     ts.Executor.Avatar = avatarFiles.TryGet(ts.ExecutorId);
+                    // }
 
                     var taskStatusName = statuseNames.Find(x => x.StatusId == ts.TaskStatusId)?.StatusName;
 
